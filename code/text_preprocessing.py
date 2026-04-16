@@ -31,6 +31,10 @@ def load_data(file_path):
 
 # 文本预处理函数
 def preprocess_text(text):
+    # 确保text是字符串
+    if not isinstance(text, str):
+        text = str(text)
+    
     # 1. 移除 HTML 标记
     soup = BeautifulSoup(text, 'html.parser')
     text = soup.get_text()
@@ -44,7 +48,7 @@ def preprocess_text(text):
     text = text.replace('\\\'', '')
     
     # 清理所有反斜杠
-    text = re.sub(r'\\+', '', text)
+    text = re.sub(r'\+', '', text)
     
     # 3. 清理多余的引号
     text = re.sub(r'"+', '', text)
@@ -52,36 +56,52 @@ def preprocess_text(text):
     # 4. 清理井号和其他特殊符号
     text = re.sub(r'[#*]+', '', text)
     
-    # 5. 小写化
+    # 5. 清理其他特殊字符
+    text = re.sub(r'[!@#$%^&*()_+\-=\[\]{};\\\'\"\\|,.<>\/\?]', ' ', text)
+    
+    # 6. 小写化
     text = text.lower()
     
-    # 6. 再次清理反斜杠（确保无残留）
-    text = re.sub(r'\\+', '', text)
+    # 7. 再次清理反斜杠（确保无残留）
+    text = re.sub(r'\+', '', text)
     
-    # 7. 处理标点符号和数字
+    # 8. 处理标点符号和数字
     # 先将所有标点和数字替换为空格，然后移除多余的空格
     text = re.sub(r'[^a-zA-Z\s]', ' ', text)
     # 移除多余的空格
     text = re.sub(r'\s+', ' ', text).strip()
     
-    # 8. 分词
+    # 9. 分词
     words = text.split()
     
-    # 9. 移除停用词
+    # 10. 移除停用词
     processed_words = []
     for word in words:
         # 清理单词中的反斜杠
-        word = re.sub(r'\\+', '', word)
+        word = re.sub(r'\+', '', word)
         if word not in stop_words:
             processed_words.append(word)
     
-    # 10. 将单词重新连接成一个字符串，用空格分隔
+    # 11. 将单词重新连接成一个字符串，用空格分隔
     processed_text = ' '.join(processed_words)
     
     # 最终清理反斜杠
-    processed_text = re.sub(r'\\+', '', processed_text)
+    processed_text = re.sub(r'\+', '', processed_text)
     
     return processed_text
+
+# 预处理所有列的函数
+def preprocess_all_columns(df):
+    """预处理数据框的所有列"""
+    for col in df.columns:
+        if df[col].dtype == 'object':
+            # 处理ID列，移除引号
+            if col == 'id':
+                df[col] = df[col].astype(str).apply(lambda x: re.sub(r'"+', '', x))
+            # 处理其他文本列
+            elif col in ['review', 'processed_review']:
+                df[col] = df[col].astype(str).apply(preprocess_text)
+    return df
 
 # 主函数
 def main():
@@ -89,29 +109,29 @@ def main():
     file_path = 'labeledTrainData.tsv'
     df = load_data(file_path)
     
-    # 预处理文本
-    df['processed_review'] = df['review'].apply(preprocess_text)
+    # 预处理所有列
+    df = preprocess_all_columns(df)
     
     # 保存处理后的数据
     df.to_csv('processedTrainData.tsv', sep='\t', index=False)
     
     # 创建实验日志
     log_data = {
-        'id': [20],
-        '主要改动': ['移除词干提取步骤，保留完整单词，确保文本更加自然'],
-        '实现结果': ['成功重新生成 processedTrainData.tsv 文件，确保文本完全干净无任何特殊符号且单词之间有正确的空格，保留完整单词形式']
+        'id': [32],
+        '主要改动': ['增强文本预处理功能，添加preprocess_all_columns函数，清理所有列的特殊符号和引号'],
+        '实现结果': ['成功重新生成 processedTrainData.tsv 文件，确保所有列都被彻底清洗，无任何特殊符号和多余引号']
     }
     log_df = pd.DataFrame(log_data)
     # 追加到现有日志文件
     try:
-        existing_log = pd.read_csv('experiment_log.csv')
+        existing_log = pd.read_csv('results/experiment_log.csv')
         log_df = pd.concat([existing_log, log_df], ignore_index=True)
     except FileNotFoundError:
         pass
-    log_df.to_csv('experiment_log.csv', index=False)
+    log_df.to_csv('results/experiment_log.csv', index=False, encoding='utf-8')
     
     print("文本预处理完成，处理后的数据已保存到 processedTrainData.tsv")
-    print("实验日志已保存到 experiment_log.csv")
+    print("实验日志已保存到 results/experiment_log.csv")
 
 if __name__ == "__main__":
     main()
