@@ -1,0 +1,30 @@
+id,主要改动,实现结果
+1,移除 HTML 标记，小写化，处理标点符号和数字，移除停用词，词干提取,成功生成 processedTrainData.tsv 文件，包含预处理后的评论文本
+2,加强 HTML 标签清洗，移除所有标点和数字，重新处理文本,成功重新生成 processedTrainData.tsv 文件，确保无 HTML 标签和多余标点
+3,进一步加强清洗，移除反斜杠、括号、井号等特殊字符，确保无残留 HTML 标签,成功重新生成 processedTrainData.tsv 文件，确保文本干净无杂质
+4,再次加强清洗，移除多余引号、井号、星号等特殊符号，确保文本完全干净,成功重新生成 processedTrainData.tsv 文件，确保文本无任何特殊符号和杂质
+5,加强反斜杠清洗，确保所有反斜杠（包括转义的反斜杠）都被彻底移除,成功重新生成 processedTrainData.tsv 文件，确保文本无任何反斜杠和其他特殊符号
+6,使用字符串替换方法彻底移除所有反斜杠，确保无残留,成功重新生成 processedTrainData.tsv 文件，确保文本完全干净无任何特殊符号
+7,加强反斜杠清理，添加双重替换确保所有反斜杠都被彻底移除,成功重新生成 processedTrainData.tsv 文件，确保文本无任何反斜杠和其他特殊符号
+8,在预处理的多个阶段添加反斜杠清理，确保所有反斜杠都被彻底移除,成功重新生成 processedTrainData.tsv 文件，确保文本完全干净无任何特殊符号
+9,使用正则表达式彻底移除所有反斜杠，确保无残留,成功重新生成 processedTrainData.tsv 文件，确保文本完全干净无任何特殊符号
+10,使用循环多次替换反斜杠，确保所有反斜杠都被彻底移除,成功重新生成 processedTrainData.tsv 文件，确保文本完全干净无任何特殊符号
+11,使用更强大的正则表达式清理反斜杠，确保所有反斜杠都被彻底移除,成功重新生成 processedTrainData.tsv 文件，确保文本完全干净无任何特殊符号
+12,使用字符串替换方法清理反斜杠，确保所有反斜杠都被彻底移除,成功重新生成 processedTrainData.tsv 文件，确保文本完全干净无任何特殊符号
+13,使用正则表达式清理反斜杠，确保所有反斜杠都被彻底移除,成功重新生成 processedTrainData.tsv 文件，确保文本完全干净无任何特殊符号
+14,使用字符串替换方法清理反斜杠，确保所有反斜杠都被彻底移除,成功重新生成 processedTrainData.tsv 文件，确保文本完全干净无任何特殊符号
+15,使用循环多次替换反斜杠，确保所有反斜杠都被彻底移除,成功重新生成 processedTrainData.tsv 文件，确保文本完全干净无任何特殊符号
+16,使用正则表达式清理反斜杠，确保所有反斜杠都被彻底移除,成功重新生成 processedTrainData.tsv 文件，确保文本完全干净无任何特殊符号
+17,处理转义引号字符，确保所有转义字符都被彻底移除,成功重新生成 processedTrainData.tsv 文件，确保文本完全干净无任何特殊符号
+18,修改数据读取函数，正确处理转义字符,成功重新生成 processedTrainData.tsv 文件，确保文本完全干净无任何特殊符号
+19,修改标点符号处理方式，先替换为空格再移除多余空格，确保单词之间有正确的空格,成功重新生成 processedTrainData.tsv 文件，确保文本完全干净无任何特殊符号且单词之间有正确的空格
+20,移除词干提取步骤，保留完整单词，确保文本更加自然,成功重新生成 processedTrainData.tsv 文件，确保文本完全干净无任何特殊符号且单词之间有正确的空格，保留完整单词形式
+21,使用词袋模型创建特征，使用随机森林进行监督学习，树的数量设置为100,成功创建词袋特征，训练随机森林模型，准确率达到0.8374，保存预测结果到processedTrainData.tsv
+22,引入分布式词向量，使用正则表达式对unlabeledTrainData.tsv文件进行句子拆分,成功读取unlabeledTrainData.tsv文件，处理前1000条评论，拆分出13458个句子
+23,引入分布式词向量，使用正则表达式对unlabeledTrainData.tsv文件的所有评论进行句子拆分,成功读取unlabeledTrainData.tsv文件，处理所有49998条评论，拆分出687321个句子
+24,使用NLTK的punkt分词器对processedTrainData.tsv文件进行句子拆分,成功读取processedTrainData.tsv文件，处理所有25000条评论，拆分出0个句子
+24,使用正则表达式对processedTrainData.tsv文件进行句子拆分,成功读取processedTrainData.tsv文件，处理所有25000条评论，拆分出25000个句子
+25,训练Word2Vec模型，使用skip-gram架构，分层softmax算法，词向量纬度300，窗口大小10，最小词数40,成功训练Word2Vec模型，词汇表大小8157，模型已保存为skipgram_word2vec_model.model
+26,基于词袋模型和随机森林模型生成提交文件sampleSubmission.csv,成功对testData.tsv进行预处理，使用训练好的模型预测情感标签，生成符合要求格式的提交文件
+26,基于词袋模型和随机森林模型生成提交文件sampleSubmission.csv,成功对testData.tsv进行预处理，使用训练好的模型预测情感标签，生成符合要求格式的提交文件
+26,基于词袋模型和随机森林模型生成提交文件sampleSubmission.csv,成功对testData.tsv进行预处理，使用训练好的模型预测情感标签，生成符合要求格式的提交文件
