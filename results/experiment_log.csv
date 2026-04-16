@@ -35,3 +35,4 @@ id,主要改动,实现结果
 32,增强文本预处理功能，添加preprocess_all_columns函数，清理所有列的特殊符号和引号,成功重新生成 processedTrainData.tsv 文件，确保所有列都被彻底清洗，无任何特殊符号和多余引号
 33,使用清洗后的processedTrainData.tsv文件重新训练Word2Vec模型，调整参数（向量维度400，窗口大小15）,成功训练了三个不同参数的Word2Vec模型，分别保存为word2vec_model_400d_cleaned.model、word2vec_model_15window_cleaned.model和word2vec_model_400d_15window_cleaned.model
 34,使用新训练的Word2Vec模型（400维，15窗口）和逻辑回归模型生成新的提交文件,成功使用清洗后的数据集训练Word2Vec模型，然后训练逻辑回归模型，生成新的提交文件
+35,结合Word2Vec（400维，15窗口）和TF-IDF特征，训练逻辑回归模型,成功结合Word2Vec和TF-IDF特征，训练逻辑回归模型，生成新的提交文件
