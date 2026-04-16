@@ -1,8 +1,7 @@
 import pandas as pd
 import numpy as np
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.ensemble import RandomForestClassifier
-import pickle
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.linear_model import LogisticRegression
 from text_preprocessing import preprocess_text
 
 # 读取训练数据
@@ -17,17 +16,17 @@ def load_test_data(file_path):
     df = pd.read_csv(file_path, sep='\t', escapechar='\\', quoting=3)
     return df
 
-# 创建词袋特征
-def create_bag_of_words(df, max_features=5000):
-    """使用CountVectorizer创建词袋特征"""
-    vectorizer = CountVectorizer(analyzer='word', max_features=max_features)
+# 创建TF-IDF特征（使用n-gram短语模式）
+def create_tfidf_features(df, max_features=5000):
+    """使用TfidfVectorizer创建TF-IDF特征，支持n-gram短语模式"""
+    vectorizer = TfidfVectorizer(analyzer='word', max_features=max_features, ngram_range=(1, 2))
     X = vectorizer.fit_transform(df['processed_review'])
     return X, vectorizer
 
-# 训练随机森林模型
-def train_random_forest(X, y, n_estimators=100):
-    """使用随机森林进行监督学习"""
-    model = RandomForestClassifier(n_estimators=n_estimators, random_state=42)
+# 训练逻辑回归模型
+def train_logistic_regression(X, y):
+    """使用逻辑回归进行监督学习"""
+    model = LogisticRegression(random_state=42, max_iter=1000)
     model.fit(X, y)
     return model
 
@@ -49,13 +48,13 @@ def main():
         train_df.to_csv(training_data_path, sep='\t', index=False)
     
     # 准备特征和标签
-    print("正在创建词袋特征...")
-    X_train, vectorizer = create_bag_of_words(train_df)
+    print("正在创建TF-IDF特征（使用n-gram短语模式）...")
+    X_train, vectorizer = create_tfidf_features(train_df)
     y_train = train_df['sentiment'].values
     
     # 训练模型
-    print("正在训练随机森林模型...")
-    model = train_random_forest(X_train, y_train, n_estimators=100)
+    print("正在训练逻辑回归模型...")
+    model = train_logistic_regression(X_train, y_train)
     
     # 读取测试数据
     print("正在读取测试数据...")
@@ -65,8 +64,8 @@ def main():
     print("正在预处理测试数据...")
     test_df['processed_review'] = test_df['review'].apply(preprocess_text)
     
-    # 将测试数据转换为词袋特征
-    print("正在转换测试数据为词袋特征...")
+    # 将测试数据转换为TF-IDF特征
+    print("正在转换测试数据为TF-IDF特征...")
     X_test = vectorizer.transform(test_df['processed_review'])
     
     # 预测测试数据
@@ -87,18 +86,18 @@ def main():
     # 写入实验日志
     print("正在写入实验日志...")
     log_data = {
-        'id': [26],
-        '主要改动': ['基于词袋模型和随机森林模型生成提交文件sampleSubmission.csv'],
-        '实现结果': ['成功对testData.tsv进行预处理，使用训练好的模型预测情感标签，生成符合要求格式的提交文件']
+        'id': [28],
+        '主要改动': ['使用逻辑回归模型和TF-IDF特征（n-gram短语模式）生成新的提交文件'],
+        '实现结果': ['成功对testData.tsv进行预处理，使用训练好的逻辑回归模型预测情感标签，生成符合要求格式的提交文件']
     }
     log_df = pd.DataFrame(log_data)
     # 追加到现有日志文件
     try:
-        existing_log = pd.read_csv('experiment_log.csv')
+        existing_log = pd.read_csv('results/experiment_log.csv')
         log_df = pd.concat([existing_log, log_df], ignore_index=True)
     except FileNotFoundError:
         pass
-    log_df.to_csv('experiment_log.csv', index=False, encoding='utf-8')
+    log_df.to_csv('results/experiment_log.csv', index=False, encoding='utf-8')
     print("实验日志已更新")
     
     # 打印提交文件样例
