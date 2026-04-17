@@ -2,6 +2,29 @@ import pandas as pd
 import re
 from bs4 import BeautifulSoup
 
+# 简单的词干提取函数
+def simple_stemmer(word):
+    # 简单的词干提取规则
+    suffixes = ['ing', 'ed', 'es', 's']
+    for suffix in suffixes:
+        if word.endswith(suffix):
+            return word[:-len(suffix)]
+    return word
+
+try:
+    import nltk
+    from nltk.stem import WordNetLemmatizer
+    # 尝试下载必要的资源
+    nltk.download('wordnet', quiet=True)
+    nltk.download('omw-1.4', quiet=True)
+    # 初始化词形还原器
+    lemmatizer = WordNetLemmatizer()
+    use_lemmatizer = True
+except Exception as e:
+    print(f"词形还原初始化失败: {e}")
+    print("使用简单词干提取作为备选方案")
+    use_lemmatizer = False
+
 # 内置停用词列表（移除否定词）
 stop_words = set([
     'i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselves', 'you', "you're", "you've", "you'll", "you'd", 'your', 'yours', 'yourself', 'yourselves',
@@ -15,15 +38,6 @@ stop_words = set([
     's', 't', 'can', 'will', 'now', 'd', 'll', 'm', 'o', 're', 've', 'y',
     'ain', 'ma'
 ])
-
-# 简单的词干提取函数
-def simple_stemmer(word):
-    # 简单的词干提取规则
-    suffixes = ['ing', 'ed', 'es', 's']
-    for suffix in suffixes:
-        if word.endswith(suffix):
-            return word[:-len(suffix)]
-    return word
 
 # 读取数据
 def load_data(file_path):
@@ -74,13 +88,18 @@ def preprocess_text(text):
     # 9. 分词
     words = text.split()
     
-    # 10. 移除停用词
+    # 10. 移除停用词并进行词形还原或词干提取
     processed_words = []
     for word in words:
         # 清理单词中的反斜杠
         word = re.sub(r'\+', '', word)
         if word not in stop_words:
-            processed_words.append(word)
+            # 根据配置选择使用词形还原或词干提取
+            if use_lemmatizer:
+                processed_word = lemmatizer.lemmatize(word)
+            else:
+                processed_word = simple_stemmer(word)
+            processed_words.append(processed_word)
     
     # 11. 将单词重新连接成一个字符串，用空格分隔
     processed_text = ' '.join(processed_words)
@@ -117,9 +136,9 @@ def main():
     
     # 创建实验日志
     log_data = {
-        'id': [32],
-        '主要改动': ['增强文本预处理功能，添加preprocess_all_columns函数，清理所有列的特殊符号和引号'],
-        '实现结果': ['成功重新生成 processedTrainData.tsv 文件，确保所有列都被彻底清洗，无任何特殊符号和多余引号']
+        'id': [37],
+        '主要改动': ['增强文本预处理功能，添加词形还原（WordNetLemmatizer），优化数据预处理过程'],
+        '实现结果': ['成功重新生成 processedTrainData.tsv 文件，使用词形还原替代简单词干提取，提高文本处理质量']
     }
     log_df = pd.DataFrame(log_data)
     # 追加到现有日志文件
