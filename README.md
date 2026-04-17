@@ -15,6 +15,7 @@
   - `word2vec_logistic_regression_cleaned.py`：基于清洗数据的Word2Vec和逻辑回归
   - `word2vec_tfidf_combined.py`：Word2Vec和TF-IDF特征结合
   - `word2vec_tfidf_combined_cleaned.py`：基于清洗数据的Word2Vec和TF-IDF特征结合
+  - `linear_regression_word2vec_tfidf.py`：线性回归结合Word2Vec和TF-IDF特征
   - `lstm_word2vec.py`：LSTM和Word2Vec模型
 
 - `report/`：实验报告
@@ -45,6 +46,7 @@
 | 逻辑回归 + Word2Vec (300d) | 0.8662 | 300维词向量均值 |
 | 逻辑回归 + Word2Vec (400d, 15window) | 0.8708 | 400维词向量均值 |
 | 逻辑回归 + Word2Vec + TF-IDF | **0.8886** | 400维词向量均值 + 5000维TF-IDF |
+| 线性回归 + Word2Vec + TF-IDF | 0.8580 | 400维词向量均值 + 5000维TF-IDF |
 
 ## 最佳模型
 
