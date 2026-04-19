@@ -64,3 +64,4 @@ id,主要改动,实现结果
 46,"改进模型训练流程，TF-IDF ngram_range=(1, 2), max_features=10000, C=1.0",测试集准确率: 0.8450
 46,"改进模型训练流程，TF-IDF ngram_range=(1, 2), max_features=15000, C=1.0",测试集准确率: 0.8498
 46,"改进模型训练流程，使用统一的预处理和TF-IDF参数优化（max_features=15000, ngram_range=(1,2)）",测试集准确率: 0.8498
+47,按照要求执行完整流程：文本清洗、划分训练/验证集、TF-IDF+LogisticRegression训练、验证评估、测试预测、导出提交文件,验证集准确率: 0.8490，生成提交文件 sampleSubmission.csv
