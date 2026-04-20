@@ -23,7 +23,7 @@
 ## 3. 比赛与提交信息
 - **比赛名称**：Bag of Words Meets Bags of Popcorn
 - **比赛链接**：https://www.kaggle.com/c/word2vec-nlp-tutorial
-- **提交日期**：2026-04-17
+- **提交日期**：2026-04-20
 
 - **GitHub 仓库地址**：https://github.com/1871698/Machine
 - **GitHub README 地址**：https://github.com/1871698/Machine/blob/main/README.md
@@ -35,18 +35,19 @@
 ## 4. Kaggle 成绩
 请填写你最终提交到 Kaggle 的结果：
 
-- **Public Score**：
-- **Private Score**（如有）：
+- **Public Score**：0.95788
+- **Private Score**（如有）：0.95788
 - **排名**（如能看到可填写）：
 
 ---
 
 ## 5. Kaggle 截图
 请在下方插入 Kaggle 提交结果截图，要求能清楚看到分数信息。
+![alt text](112304260116_张晓敏_kaggle_score.png)
 
 ![Kaggle截图](./images/kaggle_score.png)
 
-> 建议将截图保存在 `images` 文件夹中。  
+> 建议将截图保存在 `images` 文件夹中。
 > 截图文件名示例：`112304260116_张晓敏_kaggle_score.png`
 
 ---
@@ -121,13 +122,13 @@
 请简要说明你的实验流程。
 
 示例：
-1. 读取训练集和测试集  
-2. 对文本进行预处理  
-3. 训练或加载 Word2Vec 模型  
-4. 将每条文本表示为句向量  
-5. 用训练集训练分类器  
-6. 在测试集上预测结果  
-7. 生成 submission 文件并提交 Kaggle  
+1. 读取训练集和测试集
+2. 对文本进行预处理
+3. 训练或加载 Word2Vec 模型
+4. 将每条文本表示为句向量
+5. 用训练集训练分类器
+6. 在测试集上预测结果
+7. 生成 submission 文件并提交 Kaggle
 
 **我的实验流程：**
 1. 读取训练集（labeledTrainData.tsv）和测试集（testData.tsv）
@@ -172,27 +173,26 @@
 **我的项目结构：**
 ```text
 Machine/
-├─ code/                          # 存放实验代码
+├─ data_raw/                      # 原始数据文件
+│  ├─ labeledTrainData.tsv        # 训练数据
+│  ├─ testData.tsv                # 测试数据
+│  └─ unlabeledTrainData.tsv      # 未标记数据
+├─ src/                           # 源代码
+│  ├─ make_submission.py          # 传统/集成方案（w2v/tfidf/nbsvm/stack）
+│  ├─ make_submission_transformer.py # Transformer 微调生成提交
+│  └─ blend_submissions.py        # 融合多个 submission
+├─ artifacts/                     # 传统模型缓存
+├─ images/                        # README 截图
+├─ code/                          # 原有实验代码
 │  ├─ text_preprocessing.py       # 文本预处理
 │  ├─ bag_of_words_forest.py      # 词袋模型和随机森林
 │  ├─ train_word2vec_tuned.py     # 调整参数的Word2Vec模型训练
-│  ├─ train_word2vec_cleaned.py   # 基于清洗数据的Word2Vec模型训练
-│  ├─ word2vec_logistic_regression.py           # Word2Vec和逻辑回归
-│  ├─ word2vec_logistic_regression_cleaned.py  # 基于清洗数据的Word2Vec和逻辑回归
-│  ├─ word2vec_tfidf_combined.py               # Word2Vec和TF-IDF特征结合
-│  ├─ word2vec_tfidf_combined_cleaned.py        # 基于清洗数据的Word2Vec和TF-IDF特征结合
-│  ├─ linear_regression_word2vec_tfidf.py      # 线性回归结合Word2Vec和TF-IDF特征
-│  └─ lstm_word2vec.py          # LSTM和Word2Vec模型
-├─ results/                       # 存放实验结果
+│  └─ ...                         # 其他实验代码
+├─ results/                       # 实验结果
 │  ├─ experiment_log.csv          # 实验日志
 │  └─ sampleSubmission.csv        # 提交文件
-├─ images/                        # 存放README中使用的图片
-│  └─ kaggle_score.png            # Kaggle成绩截图
-├─ labeledTrainData.tsv           # 训练数据
-├─ testData.tsv                   # 测试数据
-├─ unlabeledTrainData.tsv         # 未标记数据
-├─ processedTrainData.tsv         # 预处理后的训练数据
-├─ word2vec_model_400d_15window_cleaned.model  # Word2Vec模型
+├─ requirements.txt               # 依赖
+├─ .gitignore                     # git忽略文件
 └─ README.md                      # 仓库说明文档
 ```
 
@@ -217,6 +217,39 @@ Machine/
 | 35 | 基于清洗数据测试Word2Vec+TF-IDF+逻辑回归 | 准确率0.8886 |
 | 36 | 将逻辑回归改为线性回归 | 准确率0.8580 |
 | 37 | 增强文本预处理功能，添加词形还原 | 使用简单词干提取，提高文本处理质量 |
+| 38 | 按照GitHub仓库方法重新组织项目结构 | 创建data_raw、src、artifacts等目录 |
+| 39 | 添加Transformer模型支持 | 实现make_submission_transformer.py |
+| 40 | 运行传统强基线（TF-IDF）模型 | 生成submission_tfidf_both.csv，准确率0.8950 |
+
+---
+
+## 10. 复现方式
+
+### 10.1 安装依赖
+```bash
+cd D:\机器学习（大三下）\实验2\labeledTrainData.tsv
+pip install -r .\requirements.txt
+```
+
+### 10.2 传统强基线（TF-IDF）
+```bash
+python .\src\make_submission.py --data-dir .\data_raw --features tfidf_both --out .\submission_tfidf_both.csv
+```
+
+### 10.3 Word2Vec模型
+```bash
+python .\src\make_submission.py --data-dir .\data_raw --features word2vec --out .\submission_word2vec.csv
+```
+
+### 10.4 Transformer模型（需GPU）
+```bash
+python .\src\make_submission_transformer.py --data-dir .\data_raw --model roberta-large --epochs 2 --batch-size 2 --grad-accum 8 --fp16 --grad-checkpointing --valid-ratio 0 --no-eval --out .\submission_roberta_large.csv
+```
+
+### 10.5 融合提交
+```bash
+python .\src\blend_submissions.py --method rank_mean --out .\submission_blend.csv --inputs .\submission_tfidf_both.csv .\submission_word2vec.csv
+```
 
 ---
 
@@ -256,6 +289,6 @@ Machine/
 
 ---
 
-**实验完成日期**：2026-04-17  
-**学生签名**：张晓敏  
+**实验完成日期**：2026-04-17
+**学生签名**：张晓敏
 **学号**：112304260116
