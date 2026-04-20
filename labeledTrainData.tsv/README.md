@@ -23,7 +23,7 @@
 ## 3. 比赛与提交信息
 - **比赛名称**：Bag of Words Meets Bags of Popcorn
 - **比赛链接**：https://www.kaggle.com/c/word2vec-nlp-tutorial
-- **提交日期**：2026-04-17
+- **提交日期**：2026-04-20
 
 - **GitHub 仓库地址**：https://github.com/1871698/Machine
 - **GitHub README 地址**：https://github.com/1871698/Machine/blob/main/README.md
