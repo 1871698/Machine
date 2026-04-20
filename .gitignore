@@ -1,0 +1,22 @@
+# 数据文件
+*.zip
+
+# 模型文件
+*.model
+*.vectors
+*.npy
+
+# 提交文件
+submission_*.csv
+sampleSubmission*.csv
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+
+# IDE
+.vscode/
+.idea/

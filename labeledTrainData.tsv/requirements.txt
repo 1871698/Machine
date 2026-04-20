@@ -1,0 +1,11 @@
+numpy
+pandas
+scikit-learn
+nltk
+beautifulsoup4
+gensim
+transformers
+torch
+accelerate
+matplotlib
+seaborn
